@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DinoForum.Models
 {
@@ -11,10 +12,16 @@ namespace DinoForum.Models
         public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Post content is required.")]
+        [Display(Name = "Message")]
         public string Content { get; set; } = string.Empty;
 
         //Images are optional
         public string ImageFilename { get; set; } = string.Empty;
         public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        //Handle image upload
+        [NotMapped]
+        [Display(Name = "Photo")]
+        public IFormFile? ImageFile { get; set; }
     }
 }
