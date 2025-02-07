@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using DinoForum.Data;
 namespace DinoForum
 {
     public class Program
@@ -5,6 +8,8 @@ namespace DinoForum
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<DinoForumContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DinoForumContext") ?? throw new InvalidOperationException("Connection string 'DinoForumContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
