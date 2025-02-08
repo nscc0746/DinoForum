@@ -1,7 +1,7 @@
 ﻿@model DinoForum.Models.Comment
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Comment";
 }
 
 <h1>Create</h1>
@@ -9,24 +9,18 @@
 <h4>Comment</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
+                <input type="hidden" asp-for="DiscussionId" value="@ViewData["DiscussionId"]"/>
                 <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
+                <textarea rows="4" asp-for="Content" class="form-control">
+                </textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiscussionId" class="control-label"></label>
-                <input asp-for="DiscussionId" class="form-control" />
-                <span asp-validation-for="DiscussionId" class="text-danger"></span>
-            </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -35,7 +29,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="/home/getdiscussion/@ViewData["DiscussionId"]">Back to Post</a>
 </div>
 
 @section Scripts {

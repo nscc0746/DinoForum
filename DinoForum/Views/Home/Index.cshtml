@@ -5,13 +5,25 @@
 }
 
 <div class="text-center">
+    <h1>Newest Posts</h1>
+</div>
+<div class="col-12">
     @foreach (var post in Model)
     {
-        string imageSrc = Url.Content("/images/" + post.ImageFilename);
 
-        <div style="d-flex">
-            <p>@post.Title</p>
-            <img style="max-width:300px;" src="@imageSrc" />
+        <div class="my-2 border p-2 col-12 d-flex flex-row">
+            <div class="col-8">
+                <h2><a class="d-block" href="./home/getdiscussion/@post.DiscussionId">@post.Title</a></h2>
+                <span class="d-block">@post.CreateDate</span>
+                <span class="d-block">@post.Comments?.Count comments.</span>
+            </div>
+            @if (post.ImageFilename != "")
+            {
+                string imageSrc = Url.Content("/images/" + post.ImageFilename);
+                <div class="col-4 p-2 d-flex justify-content-end">
+                    <img class="ml-auto" style="max-width:50%;" src="@imageSrc" />
+                </div>
+            }
         </div>
     }
 </div>

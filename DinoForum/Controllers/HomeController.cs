@@ -17,9 +17,29 @@ namespace DinoForum.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var discussions = await _context.Discussion.ToListAsync();
+            var discussions = await _context.Discussion
+                .Include(p => p.Comments)
+                .OrderByDescending(p => p.CreateDate)
+                .ToListAsync();
 
             return View(discussions);
+        }
+
+        public async Task<IActionResult> GetDiscussion(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var discussion = await _context.Discussion.Include(p => p.Comments).FirstOrDefaultAsync(p => p.DiscussionId == id);
+
+            if (discussion == null)
+            {
+                return NotFound();
+            }
+
+            return View(discussion);
         }
 
         public IActionResult Privacy()

@@ -7,11 +7,14 @@ namespace DinoForum.Models
         public int CommentId { get; set; }
 
         [Required(ErrorMessage = "A comment body is required.")]
-        public string Content { get; set; }
+        [Display(Name = "Message")]
+        public string Content { get; set; } = string.Empty;
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         //Foreign Key
         public int DiscussionId { get; set; }
+
+        public Discussion? Discussion { get; set; }
     }
 }

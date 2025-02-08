@@ -23,8 +23,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </ul>
+                    <ul class="ml-auto navbar-nav flex-grow-0">
+                        <li class="ml-auto nav-item">
+                            <a class="nav-link text-dark" href="@Url.Action("Create", "Discussions")">New Post</a>
                         </li>
                     </ul>
                 </div>

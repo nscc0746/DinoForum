@@ -1,0 +1,40 @@
+﻿@model DinoForum.Models.Discussion
+
+@{
+    ViewData["Title"] = "Discussion";
+}
+
+<div class="text-center">
+    <h1>@Model.Title</h1>
+    <h6>Posted: @Model.CreateDate</h6>
+    @if (Model.ImageFilename != "")
+    {
+        <img class="my-2" style="max-width: 250px;" src="@Url.Content("/images/" + Model.ImageFilename)" alt="Alternate Text" />
+    }
+    <p>@Model.Content</p>
+    <hr />
+    <span class="d-block">@Model.Comments?.Count comments</span>
+
+    <a href="@Url.Action("Create", "Comments", new { id = Model.DiscussionId })">Add a comment.</a>
+    @if (Model.Comments == null) {
+        <div class="p-0 alert alert-secondary">
+            <p>No comments yet. Be the first one to start a conversation?</p>    
+        </div>
+    }
+    else
+    {
+        @foreach (var comment in Model.Comments.OrderByDescending(p => p.CreateDate))
+        {
+            if (comment != null)
+            {
+                <div class="card my-2">
+                    <div class="card-body">
+                        <span class="d-block">@comment.Content</span>
+                        <span class="d-block">-- @comment.CreateDate --</span>
+                    </div>
+                </div>
+            }
+        }
+
+    }
+</div>

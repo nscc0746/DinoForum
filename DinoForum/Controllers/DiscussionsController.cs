@@ -58,17 +58,15 @@ namespace DinoForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DiscussionId,Title,Content,ImageFile,CreateDate")] Discussion discussion)
         {
-            //
-            discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
+
 
             if (ModelState.IsValid)
             {
-                _context.Add(discussion);
-                await _context.SaveChangesAsync();
 
-                //Save the image file - We're doing this after the database record has been created as per Michael's examples.
+                //Save the image file first, then save the record
                 if (discussion.ImageFile != null)
                 {
+                    discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile.FileName);
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", discussion.ImageFilename);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -77,7 +75,10 @@ namespace DinoForum.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                _context.Add(discussion);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("GetDiscussion", "Home", new { id = discussion.DiscussionId });
             }
             return View(discussion);
         }

@@ -15,13 +15,15 @@ namespace DinoForum.Models
         [Display(Name = "Message")]
         public string Content { get; set; } = string.Empty;
 
-        //Images are optional
+        //Images are optional, dates are auto generated
         public string ImageFilename { get; set; } = string.Empty;
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         //Handle image upload
         [NotMapped]
-        [Display(Name = "Photo")]
+        [Display(Name = "Picture")]
         public IFormFile? ImageFile { get; set; }
+
+        public List<Comment>? Comments { get; set; }
     }
 }
