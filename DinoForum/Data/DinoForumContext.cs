@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DinoForum.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DinoForum.Data
 {
-    public class DinoForumContext : DbContext
+    public class DinoForumContext : IdentityDbContext<DinoForumUser>
     {
         public DinoForumContext (DbContextOptions<DinoForumContext> options)
             : base(options)

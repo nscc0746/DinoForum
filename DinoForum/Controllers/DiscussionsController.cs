@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DinoForum.Data;
 using DinoForum.Models;
-using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Identity;
 
 namespace DinoForum.Controllers

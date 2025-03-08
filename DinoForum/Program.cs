@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using DinoForum.Data;
+using Microsoft.AspNetCore.Identity;
 namespace DinoForum
 {
     public class Program
@@ -10,6 +11,8 @@ namespace DinoForum
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<DinoForumContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DinoForumContext") ?? throw new InvalidOperationException("Connection string 'DinoForumContext' not found.")));
+
+            builder.Services.AddDefaultIdentity<DinoForumUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<DinoForumContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -35,6 +38,7 @@ namespace DinoForum
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
+            app.MapRazorPages().WithStaticAssets();
             app.Run();
         }
     }
