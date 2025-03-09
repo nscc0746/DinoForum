@@ -73,7 +73,7 @@ namespace DinoForum.Areas.Identity.Pages.Account
         {
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Full Name")]
+            [Display(Name = "Username")]
             public string Name { get; set; }
 
             [DataType(DataType.Text)]

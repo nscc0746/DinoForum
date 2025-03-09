@@ -8,22 +8,32 @@ using Microsoft.EntityFrameworkCore;
 using DinoForum.Data;
 using DinoForum.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DinoForum.Controllers
 {
+    [Authorize]
     public class DiscussionsController : Controller
     {
         private readonly DinoForumContext _context;
+        private readonly UserManager<DinoForumUser> _userManager;
 
-        public DiscussionsController(DinoForumContext context)
+        public DiscussionsController(DinoForumContext context, UserManager<DinoForumUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Discussions
+        // GET: Discussions by user id
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Discussion.ToListAsync());
+            string userId = _userManager.GetUserId(User);
+
+            var posts = await _context.Discussion
+                .Where(p => p.DinoForumUserId == userId)
+                .ToListAsync();
+
+            return View(posts);
         }
 
         // GET: Discussions/Details/5
@@ -58,13 +68,12 @@ namespace DinoForum.Controllers
         public async Task<IActionResult> Create([Bind("DiscussionId,Title,Content,ImageFile,CreateDate")] Discussion discussion)
         {
 
-
             if (ModelState.IsValid)
             {
-
                 //Save the image file first, then save the record
                 if (discussion.ImageFile != null)
                 {
+                    discussion.DinoForumUserId = _userManager.GetUserId(User);
                     discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile.FileName);
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", discussion.ImageFilename);
 
@@ -79,6 +88,7 @@ namespace DinoForum.Controllers
 
                 return RedirectToAction("GetDiscussion", "Home", new { id = discussion.DiscussionId });
             }
+
             return View(discussion);
         }
 
@@ -90,11 +100,17 @@ namespace DinoForum.Controllers
                 return NotFound();
             }
 
-            var discussion = await _context.Discussion.FindAsync(id);
+            string userId = _userManager.GetUserId(User);
+
+            var discussion = await _context.Discussion
+                .Where(p => p.DinoForumUserId == userId)
+                .FirstOrDefaultAsync(p => p.DiscussionId == id);
+
             if (discussion == null)
             {
                 return NotFound();
             }
+
             return View(discussion);
         }
 
@@ -103,8 +119,10 @@ namespace DinoForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Content,ImageFile,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Content,ImageFilename,CreateDate,DinoForumUserId")] Discussion discussion)
         {
+            string userId = _userManager.GetUserId(User);
+
             if (id != discussion.DiscussionId)
             {
                 return NotFound();
@@ -130,6 +148,7 @@ namespace DinoForum.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(discussion);
         }
 
@@ -141,8 +160,12 @@ namespace DinoForum.Controllers
                 return NotFound();
             }
 
+            string userId = _userManager.GetUserId(User);
+
             var discussion = await _context.Discussion
-                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+                .Where(p => p.DinoForumUserId == userId)
+                .FirstOrDefaultAsync(p => p.DiscussionId == id); 
+            
             if (discussion == null)
             {
                 return NotFound();
@@ -156,7 +179,12 @@ namespace DinoForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var discussion = await _context.Discussion.FindAsync(id);
+            string userId = _userManager.GetUserId(User);
+
+            var discussion = await _context.Discussion
+                .Where(p => p.DinoForumUserId == userId)
+                .FirstOrDefaultAsync(p => p.DiscussionId == id);
+
             if (discussion != null)
             {
                 _context.Discussion.Remove(discussion);

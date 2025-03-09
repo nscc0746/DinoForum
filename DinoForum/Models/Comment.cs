@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DinoForum.Data;
 
 namespace DinoForum.Models
 {
@@ -16,5 +17,8 @@ namespace DinoForum.Models
         public int DiscussionId { get; set; }
 
         public Discussion? Discussion { get; set; }
+
+        public string DinoForumUserId { get; set; } = String.Empty;
+        public DinoForumUser? DinoForumUser { get; set; }
     }
 }

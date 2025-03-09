@@ -4,6 +4,7 @@ using DinoForum.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DinoForum.Migrations
 {
     [DbContext(typeof(DinoForumContext))]
-    partial class DinoForumContextModelSnapshot : ModelSnapshot
+    [Migration("20250308173020_IdentityModelsIntegration")]
+    partial class IdentityModelsIntegration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,7 +130,7 @@ namespace DinoForum.Migrations
 
                     b.HasIndex("DiscussionId");
 
-                    b.ToTable("Comment", (string)null);
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("DinoForum.Models.Discussion", b =>
@@ -161,7 +164,7 @@ namespace DinoForum.Migrations
 
                     b.HasIndex("DinoForumUserId");
 
-                    b.ToTable("Discussion", (string)null);
+                    b.ToTable("Discussion");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
