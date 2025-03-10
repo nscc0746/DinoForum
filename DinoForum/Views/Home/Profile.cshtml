@@ -1,0 +1,41 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Profile: " + @Model.User.Name;
+}
+
+<div class="text-center">   
+    <h1>@Model.User.Name</h1>
+    <img src="/images/@Model.User.ImageFilename" width="250" height="auto" />
+    <p class="mb-0"><b>Location:</b> @Model.User.Location</p>
+    <p class="mt-0"><b>Favorite Dinosaur:</b> @Model.User.FavoriteDino</p>
+</div>
+<div>
+    <h2 class="text-center">@Model.User.Name's Posts</h2>
+    @if (Model.Posts.Count == 0)
+    {
+        <p class="text-center">@Model.User.Name has no posts yet.</p>
+    }
+    else {
+        @foreach (var post in Model.Posts)
+        {
+            if (post != null)
+            {
+                <div class="my-2 border p-2 col-12 d-flex flex-row">
+                    <div class="col-8">
+                        <h2><a class="d-block" href="/home/getdiscussion/@post.DiscussionId">@post.Title</a></h2>
+                        <h5>Posted on @post.CreateDate.ToString("f")</h5>
+                        <span class="d-block">@post.Comments?.Count comments.</span>
+                    </div>
+                    @if (post.ImageFilename != "")
+                    {
+                        string imageSrc = Url.Content("/images/" + post.ImageFilename);
+                        <div class="col-4 p-2 d-flex justify-content-end">
+                            <img class="ml-auto" style="max-width:50%;" src="@imageSrc" />
+                        </div>
+                    }
+                </div>
+            }
+        }
+    }
+</div>

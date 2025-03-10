@@ -28,16 +28,23 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                <img src="/images/@Html.DisplayFor(modelItem => item.ImageFilename)" width="100"/>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @if (!String.IsNullOrEmpty(item.ImageFilename))
+                    {
+                        <img src="/images/@Html.DisplayFor(modelItem => item.ImageFilename)" width="100"/>
+                    }
+                    else 
+                    {
+                        <p>No Image</p>
+                    }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreateDate)
@@ -45,7 +52,7 @@
             <td>
                 <a href="/home/getdiscussion/@Html.DisplayFor(modelItem => item.DiscussionId)">View</a> |
                 <a asp-action="Edit" asp-route-id="@item.DiscussionId">Edit</a> |
-                @* <a asp-action="Details" asp-route-id="@item.DiscussionId">Details</a> | *@
+                <a asp-action="Details" asp-route-id="@item.DiscussionId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.DiscussionId">Delete</a>
             </td>
         </tr>

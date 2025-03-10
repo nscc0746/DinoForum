@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using DinoForum.Data;
+using System.ComponentModel.DataAnnotations.Schema;
+using DinoForum.Models;
 
 namespace DinoForum.Areas.Identity.Pages.Account
 {
@@ -73,8 +75,11 @@ namespace DinoForum.Areas.Identity.Pages.Account
         {
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Username")]
+            [Display(Name = "Display Name")]
             public string Name { get; set; }
+
+            [Display(Name="Profile Picture")]
+            public IFormFile ImageFile { get; set; }
 
             [DataType(DataType.Text)]
             [Display(Name = "Location")]
@@ -132,6 +137,20 @@ namespace DinoForum.Areas.Identity.Pages.Account
                 user.Name = Input.Name;
                 user.Location = Input.Location;
                 user.FavoriteDino = Input.FavoriteDino;
+                if (Input.ImageFile != null)
+                {
+                    user.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile.FileName);
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", user.ImageFilename);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Input.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+                else
+                {
+                    user.ImageFilename = "defaultProfile.png";
+                }
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

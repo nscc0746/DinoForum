@@ -6,35 +6,57 @@
 
 <div class="text-center">
     <h1>@Model.Title</h1>
-    <h6>Posted: @Model.CreateDate</h6>
+    <span class="d-block">@Model.Comments?.Count comments</span>
+    <hr />
+    <div class="d-flex justify-content-center">
+        <div class="mx-2">
+            <img class="d-inline" src="/images/@Model.DinoForumUser.ImageFilename" width="50" height="50" />
+        </div>
+        <div>
+            <h6 class="d-inline">Posted by <a href="/home/profile/@Model.DinoForumUser.Id">@Model.DinoForumUser.Name</a></h6>
+            <p>@Model.CreateDate.ToString("f")</p>
+        </div>
+    </div>
+    
     @if (Model.ImageFilename != "")
     {
-        <img class="my-2" style="max-width: 250px;" src="@Url.Content("/images/" + Model.ImageFilename)" alt="Alternate Text" />
+        <img class="me-2" style="max-width: 250px;" src="@Url.Content("/images/" + Model.ImageFilename)" alt="Alternate Text" />
     }
     <p>@Model.Content</p>
     <hr />
-    <span class="d-block">@Model.Comments?.Count comments</span>
 
-    <a href="@Url.Action("Create", "Comments", new { id = Model.DiscussionId })">Add a comment.</a>
-    @if (Model.Comments == null) {
-        <div class="p-0 alert alert-secondary">
-            <p>No comments yet. Be the first one to start a conversation?</p>    
+</div>
+<div>
+    @if (Model.Comments.Count == 0) {
+        <div class="text-center p-0 alert alert-secondary">
+            <p>No comments yet. Be the first one to start a conversation?</p>
         </div>
     }
     else
     {
-        @foreach (var comment in Model.Comments.OrderByDescending(p => p.CreateDate))
+        @foreach (var comment in Model.Comments)
         {
             if (comment != null)
             {
                 <div class="card my-2">
-                    <div class="card-body">
-                        <span class="d-block">@comment.Content</span>
-                        <span class="d-block">-- @comment.CreateDate --</span>
+                    <div class="card-body d-flex">
+                        <div class="d-flex justify-content-start">
+                            <div class="me-2">
+                                <img src="/images/@comment.DinoForumUser.ImageFilename" width="50" height="50" />
+                            </div>
+                            <div>
+                                <p class="mb-0"><a href="/home/profile/@comment.DinoForumUser.Id">@comment.DinoForumUser.Name</a></p>
+                                <p class="my-0">@comment.CreateDate.ToString("f")</p>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-grow-1 align-items-center justify-content-center">@comment.Content</div>
                     </div>
                 </div>
             }
         }
 
     }
+    <div class="text-center">
+        <a href="@Url.Action("Create", "Comments", new { id = Model.DiscussionId })">Add a comment.</a>
+    </div>
 </div>

@@ -4,6 +4,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using DinoForum.Data;
@@ -25,6 +26,8 @@ namespace DinoForum.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+        public IFormFile ImageFile { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -56,9 +59,14 @@ namespace DinoForum.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            [Display(Name = "New Profile Picture")]
+            public IFormFile ImageFile { get; set; }
+
+            public string ImageFilename { get; set; }
+
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Username")]
+            [Display(Name = "Display Name")]
             public string Name { get; set; }
 
             [DataType(DataType.Text)]
@@ -85,6 +93,7 @@ namespace DinoForum.Areas.Identity.Pages.Account.Manage
             {
                 Name = user.Name,
                 Location = user.Location,
+                ImageFilename = user.ImageFilename,
                 FavoriteDino = user.FavoriteDino,
                 PhoneNumber = phoneNumber
             };
@@ -125,6 +134,19 @@ namespace DinoForum.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.ImageFile != null)
+            {
+                string imageFilename = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile.FileName);
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageFilename);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.ImageFile.CopyToAsync(fileStream);
+                }
+
+                user.ImageFilename = imageFilename;
             }
 
             if (Input.Name != user.Name)

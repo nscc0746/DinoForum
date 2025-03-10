@@ -13,8 +13,8 @@
 
         <div class="my-2 border p-2 col-12 d-flex flex-row">
             <div class="col-8">
-                <h2><a class="d-block" href="./home/getdiscussion/@post.DiscussionId">@post.Title</a></h2>
-                <span class="d-block">@post.CreateDate</span>
+                <h2><a class="d-block" href="/home/getdiscussion/@post.DiscussionId">@post.Title</a></h2>
+                <h5>Posted by <a href="/home/profile/@post.DinoForumUser.Id">@post.DinoForumUser.Name</a> on @post.CreateDate.ToString("f")</h5>
                 <span class="d-block">@post.Comments?.Count comments.</span>
             </div>
             @if (post.ImageFilename != "")

@@ -10,6 +10,9 @@
     <li class="nav-item">
         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
     </li>
+    <li>
+        <a class="nav-link text-dark" href="/home/profile/@UserManager.GetUserId(User)">My Profile</a>
+    </li>
     <li class="ml-auto nav-item">
         <a class="nav-link text-dark" href="@Url.Action("Index", "Discussions")">My Posts</a>
     </li>

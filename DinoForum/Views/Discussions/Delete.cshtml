@@ -24,10 +24,17 @@
             @Html.DisplayFor(model => model.Content)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageFilename)
+            Image
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageFilename)
+            @if (!String.IsNullOrEmpty(Model.ImageFilename))
+            {
+                <img src="/images/@Html.DisplayFor(model => model.ImageFilename)" width="250" height="auto" />
+            }
+            else 
+            {
+                <p>No Image</p>
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreateDate)

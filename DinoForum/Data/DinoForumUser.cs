@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace DinoForum.Data
 {
@@ -12,5 +14,8 @@ namespace DinoForum.Data
 
         [PersonalData]
         public string FavoriteDino { get; set; } = String.Empty;
+
+        [PersonalData]
+        public string ImageFilename { get; set; } = String.Empty;
     }
 }

@@ -18,6 +18,8 @@ namespace DinoForum.Models
 
         //Images are optional, dates are auto generated
         public string ImageFilename { get; set; } = string.Empty;
+
+        [Display(Name = "Date Posted")]
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         //Handle image upload

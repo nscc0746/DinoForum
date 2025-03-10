@@ -70,10 +70,10 @@ namespace DinoForum.Controllers
 
             if (ModelState.IsValid)
             {
+                discussion.DinoForumUserId = _userManager.GetUserId(User);
                 //Save the image file first, then save the record
                 if (discussion.ImageFile != null)
                 {
-                    discussion.DinoForumUserId = _userManager.GetUserId(User);
                     discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile.FileName);
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", discussion.ImageFilename);
 
@@ -121,8 +121,6 @@ namespace DinoForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Content,ImageFilename,CreateDate,DinoForumUserId")] Discussion discussion)
         {
-            string userId = _userManager.GetUserId(User);
-
             if (id != discussion.DiscussionId)
             {
                 return NotFound();
